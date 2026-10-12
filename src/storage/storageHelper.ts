@@ -2,8 +2,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { StudentProfile, Assignment } from '../types';
 
 const STORAGE_KEYS = {
-  PROFILE: '@student_profile_v1',
-  ASSIGNMENTS: '@student_assignments_v1',
+  PROFILE: '@student_profile_v2',
+  ASSIGNMENTS: '@student_assignments_v2',
 };
 
 export const loadProfileFromStorage = async (): Promise<StudentProfile | null> => {
