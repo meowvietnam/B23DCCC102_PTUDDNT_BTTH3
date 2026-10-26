@@ -1,0 +1,284 @@
+{
+  "students": [
+    {
+      "id": 1,
+      "studentCode": "B23DCCC102",
+      "fullName": "Đinh Hoàng Long",
+      "className": "D23CQCN01-B",
+      "major": "Công nghệ Thông tin - UDU",
+      "email": "dinhhoanglong.b23dccc102@ptit.edu.vn",
+      "phone": "0987654321",
+      "updatedAt": "2026-10-26T08:00:00Z"
+    },
+    {
+      "id": 2,
+      "studentCode": "B23DCCC103",
+      "fullName": "Trần Thị Mai",
+      "className": "D23CQCN01-B",
+      "major": "Công nghệ Thông tin - UDU",
+      "email": "mai.tt@ptit.edu.vn",
+      "phone": "0912345678",
+      "updatedAt": "2026-10-26T08:00:00Z"
+    },
+    {
+      "id": 3,
+      "studentCode": "B23DCCC104",
+      "fullName": "Lê Văn Hùng",
+      "className": "D23CQCN01-B",
+      "major": "Công nghệ Thông tin - UDU",
+      "email": "hung.lv@ptit.edu.vn",
+      "phone": "0923456789",
+      "updatedAt": "2026-10-26T08:00:00Z"
+    },
+    {
+      "id": 4,
+      "studentCode": "B23DCCC105",
+      "fullName": "Phạm Minh Đức",
+      "className": "D23CQCN01-B",
+      "major": "Công nghệ Thông tin - UDU",
+      "email": "duc.pm@ptit.edu.vn",
+      "phone": "0934567890",
+      "updatedAt": "2026-10-26T08:00:00Z"
+    },
+    {
+      "id": 5,
+      "studentCode": "B23DCCC106",
+      "fullName": "Hoàng Thị Ngọc",
+      "className": "D23CQCN01-B",
+      "major": "Công nghệ Thông tin - UDU",
+      "email": "ngoc.ht@ptit.edu.vn",
+      "phone": "0945678901",
+      "updatedAt": "2026-10-26T08:00:00Z"
+    }
+  ],
+  "courses": [
+    {
+      "id": 1,
+      "code": "INT1340",
+      "name": "Phát triển ứng dụng cho thiết bị di động",
+      "credits": 3,
+      "lecturer": "Trần Quang Đại",
+      "description": "Lập trình ứng dụng di động đa nền tảng với React Native, tích hợp API RESTful và quản lý trạng thái offline.",
+      "semester": "HK1 2026-2027"
+    },
+    {
+      "id": 2,
+      "code": "INT1339",
+      "name": "Công nghệ phần mềm",
+      "credits": 3,
+      "lecturer": "A B C",
+      "description": "Quy trình phát triển phần mềm Agile/Scrum, thiết kế hệ thống UML và đảm bảo chất lượng phần mềm.",
+      "semester": "HK1 2026-2027"
+    },
+    {
+      "id": 3,
+      "code": "INT13147",
+      "name": "Lập trình Web hiện đại",
+      "credits": 3,
+      "lecturer": "A B C",
+      "description": "Xây dựng ứng dụng Web Fullstack với ReactJS, NodeJS, Express và cơ sở dữ liệu MongoDB/PostgreSQL.",
+      "semester": "HK1 2026-2027"
+    },
+    {
+      "id": 4,
+      "code": "INT1434",
+      "name": "Kiến trúc máy tính & Hệ điều hành",
+      "credits": 3,
+      "lecturer": "A B C",
+      "description": "Cấu trúc phần cứng máy tính, điều khiển tiến trình, quản lý bộ nhớ và hệ thống tập tin.",
+      "semester": "HK1 2026-2027"
+    },
+    {
+      "id": 5,
+      "code": "BAS1203",
+      "name": "Toán chuyên đề cho CNTT",
+      "credits": 2,
+      "lecturer": "A B C",
+      "description": "Đại số tuyến tính ứng dụng, giải tích ma trận và lý thuyết xác suất ứng dụng trong xử lý dữ liệu.",
+      "semester": "HK1 2026-2027"
+    },
+    {
+      "id": 6,
+      "code": "INT1416",
+      "name": "An toàn thông tin ứng dụng",
+      "credits": 3,
+      "lecturer": "A B C",
+      "description": "Mật mã học cơ bản, an ninh mạng, các lỗ hổng OWASP Top 10 và giải pháp phòng thủ.",
+      "semester": "HK2 2025-2026"
+    }
+  ],
+  "sessions": [
+    {
+      "id": 1,
+      "courseId": 1,
+      "dayOfWeek": 2,
+      "startTime": "07:00",
+      "endTime": "09:30",
+      "room": "P.302-A2",
+      "note": "Mang laptop cài sẵn Node.js và Android SDK"
+    },
+    {
+      "id": 2,
+      "courseId": 2,
+      "dayOfWeek": 3,
+      "startTime": "09:30",
+      "endTime": "11:45",
+      "room": "P.405-A3",
+      "note": "Báo cáo tiến độ Sprint 2 đồ án môn học"
+    },
+    {
+      "id": 3,
+      "courseId": 3,
+      "dayOfWeek": 4,
+      "startTime": "13:00",
+      "endTime": "15:15",
+      "room": "P.201-A2",
+      "note": "Thực hành triển khai RESTful API với Express"
+    },
+    {
+      "id": 4,
+      "courseId": 1,
+      "dayOfWeek": 5,
+      "startTime": "07:00",
+      "endTime": "11:45",
+      "room": "Lab 502-A2",
+      "note": "Kiểm tra thực hành React Native trên phòng Lab"
+    },
+    {
+      "id": 5,
+      "courseId": 4,
+      "dayOfWeek": 6,
+      "startTime": "09:30",
+      "endTime": "11:45",
+      "room": "P.104-A3",
+      "note": "Bài tập lập lịch CPU và quản lý bộ nhớ ảo"
+    },
+    {
+      "id": 6,
+      "courseId": 6,
+      "dayOfWeek": 7,
+      "startTime": "08:00",
+      "endTime": "10:15",
+      "room": "P.204-A3",
+      "note": "Demo khai thác và vá lỗ hổng SQL Injection"
+    }
+  ],
+  "assignments": [
+    {
+      "id": 1,
+      "courseId": 1,
+      "title": "Thực hành 4: API & Offline Mode",
+      "description": "Kết nối API qua json-server, cache bằng AsyncStorage và hàng đợi outbox tự đồng bộ.",
+      "dueDate": "2026-10-30T23:59:00Z",
+      "status": "todo",
+      "updatedAt": "2026-10-26T08:00:00Z"
+    },
+    {
+      "id": 2,
+      "courseId": 3,
+      "title": "Xây dựng RESTful API với Express",
+      "description": "Thiết kế API xác thực JWT, phân quyền người dùng và kết nối cơ sở dữ liệu.",
+      "dueDate": "2026-10-29T23:59:00Z",
+      "status": "todo",
+      "updatedAt": "2026-10-26T08:00:00Z"
+    },
+    {
+      "id": 3,
+      "courseId": 2,
+      "title": "Thiết kế biểu đồ UML ca sử dụng",
+      "description": "Vẽ biểu đồ tuần tự (Sequence) và biểu đồ lớp (Class Diagram) cho đồ án Scrum.",
+      "dueDate": "2026-11-04T23:59:00Z",
+      "status": "todo",
+      "updatedAt": "2026-10-26T08:00:00Z"
+    },
+    {
+      "id": 4,
+      "courseId": 4,
+      "title": "Mô phỏng thuật toán lập lịch CPU",
+      "description": "Lập trình giải thuật Round Robin và Shortest Job First, so sánh thời gian chờ trung bình.",
+      "dueDate": "2026-10-20T23:59:00Z",
+      "status": "done",
+      "updatedAt": "2026-10-20T10:00:00Z"
+    },
+    {
+      "id": 5,
+      "courseId": 5,
+      "title": "Bài tập Đại số tuyến tính ứng dụng",
+      "description": "Giải hệ phương trình ma trận và tính toán định thức phục vụ xử lý đồ họa.",
+      "dueDate": "2026-10-22T23:59:00Z",
+      "status": "todo",
+      "updatedAt": "2026-10-22T08:00:00Z"
+    },
+    {
+      "id": 6,
+      "courseId": 6,
+      "title": "Báo cáo thử nghiệm an toàn Web",
+      "description": "Thực hiện tấn công Blind SQLi trên môi trường giả lập và viết tài liệu khắc phục.",
+      "dueDate": "2026-11-12T23:59:00Z",
+      "status": "done",
+      "updatedAt": "2026-10-25T09:00:00Z"
+    }
+  ],
+  "grades": [
+    {
+      "id": 1,
+      "courseId": 1,
+      "semester": "HK1 2026-2027",
+      "attendance": 10,
+      "midterm": 9,
+      "final": 8.5,
+      "total": 8.8,
+      "letter": "A"
+    },
+    {
+      "id": 2,
+      "courseId": 2,
+      "semester": "HK1 2026-2027",
+      "attendance": 9.5,
+      "midterm": 8.5,
+      "final": 8,
+      "total": 8.3,
+      "letter": "B+"
+    },
+    {
+      "id": 3,
+      "courseId": 3,
+      "semester": "HK1 2026-2027",
+      "attendance": 10,
+      "midterm": 9,
+      "final": 9,
+      "total": 9.1,
+      "letter": "A"
+    },
+    {
+      "id": 4,
+      "courseId": 4,
+      "semester": "HK1 2026-2027",
+      "attendance": 9,
+      "midterm": 8,
+      "final": 8,
+      "total": 8.1,
+      "letter": "B+"
+    },
+    {
+      "id": 5,
+      "courseId": 5,
+      "semester": "HK1 2026-2027",
+      "attendance": 9,
+      "midterm": 7.5,
+      "final": 8,
+      "total": 7.95,
+      "letter": "B"
+    },
+    {
+      "id": 6,
+      "courseId": 6,
+      "semester": "HK2 2025-2026",
+      "attendance": 9.5,
+      "midterm": 8.5,
+      "final": 8,
+      "total": 8.3,
+      "letter": "B+"
+    }
+  ]
+}

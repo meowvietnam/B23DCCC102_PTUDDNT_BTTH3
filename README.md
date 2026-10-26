@@ -1,97 +1,103 @@
-This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
+# Ứng Dụng Quản Lý Học Tập (BTTH4: API & Offline Mode)
 
-# Getting Started
+- **Sinh viên:** Đinh Hoàng Long
+- **Mã sinh viên:** B23DCCC102
+- **Lớp:** D23CQCN01-B
+- **Ngành:** Công nghệ Thông tin - UDU
+- **Khoa:** Viện Khoa học Kĩ thuật Bưu điện
 
-> **Note**: Make sure you have completed the [Set Up Your Environment](https://reactnative.dev/docs/set-up-your-environment) guide before proceeding.
+---
 
-## Step 1: Start Metro
+## 1. Kiến Trúc & Luồng Dữ Liệu
 
-First, you will need to run **Metro**, the JavaScript build tool for React Native.
+Ứng dụng tuân thủ nghiêm ngặt mô hình phân tầng (Layered Architecture):
+```
+[ Màn hình (Screens) ]
+       ↓
+[ Custom Hooks (useCachedQuery, useNetworkStatus, useOutboxSync) & Context (AppDataContext, SyncContext) ]
+       ↓
+[ Services (studentService, courseService, sessionService, assignmentService, gradeService) ]
+       ↓
+┌───────────────────────┬───────────────────────┐
+│ Cache (AsyncStorage)  │  Outbox (AsyncStorage)│
+│  "Cache-First"        │   Hàng đợi Offline    │
+└───────────────────────┴───────────────────────┘
+       ↓                           ↓
+[ API Client (fetch với Timeout 10s & Chuẩn hóa lỗi) ]
+       ↓
+[ REST API (json-server 0.17.4 trên port 3000) ]
+```
 
-To start the Metro dev server, run the following command from the root of your React Native project:
+### Quy tắc phân tầng:
+1. **`screens/`**: Chỉ sử dụng `components/`, `hooks/`, `context/`, `navigation/routes.js`. Tuyệt đối không gọi `fetch` hay `AsyncStorage` trực tiếp.
+2. **`components/`**: Chỉ nhận props trình bày và callback `onXxx`. Sử dụng `theme/` và `utils/`. Không gọi API hay đọc Context.
+3. **`hooks/` & `context/`**: Gọi `api/`, `storage/`, `utils/`.
+4. **`api/`**: Gọi `client.js` và `config.js`. Không dùng React hay AsyncStorage.
+5. **`storage/`**: Đọc ghi cache và hàng đợi outbox qua `keys.js`.
 
-```sh
-# Using npm
+---
+
+## 2. Cơ Chế Xử Lý Xung Đột (Conflict Resolution - Yêu cầu B5)
+
+Khi ứng dụng hoạt động ở chế độ Offline:
+1. Mọi thao tác ghi (đổi trạng thái bài tập, thêm bài tập, sửa thông tin sinh viên) được lưu ngay vào hàng đợi `Outbox` trong `AsyncStorage` kèm nhãn thời gian `createdAt`:
+   ```json
+   {
+     "id": "1730000000_abc123",
+     "method": "PATCH",
+     "url": "/students/1",
+     "body": { "fullName": "Đinh Hoàng Long", "updatedAt": "2026-10-26T08:30:00Z" },
+     "createdAt": "2026-10-26T08:30:00Z"
+   }
+   ```
+2. Khi có mạng trở lại, hook `useOutboxSync` tự động duyệt qua các tác vụ trong hàng đợi theo đúng thứ tự FIFO.
+3. Đối với mỗi thao tác `PATCH`:
+   - Ứng dụng thực hiện `GET` dữ liệu mới nhất hiện tại từ máy chủ để kiểm tra trường `updatedAt`.
+   - **So sánh `server.updatedAt` và `action.createdAt`**:
+     - Nếu `new Date(server.updatedAt) > new Date(action.createdAt)`: Nghĩa là dữ liệu trên máy chủ đã được chỉnh sửa mới hơn sau thời điểm người dùng thao tác offline. 
+     - **Giải pháp:** Ứng dụng kích hoạt thông báo cảnh báo xung đột (Conflict Alert), ưu tiên giữ nguyên dữ liệu mới nhất từ máy chủ, và hủy bỏ thao tác offline cũ để tránh ghi đè sai lệch dữ liệu.
+     - Nếu không có xung đột: Ứng dụng gửi `PATCH` lên server và xóa tác vụ khỏi outbox.
+
+---
+
+## 3. Hướng Dẫn Cài Đặt & Khởi Chạy
+
+### Bước 1: Khởi động Mock Server (json-server)
+Chạy server trên máy tính:
+```bash
+# Sử dụng script tích hợp sẵn trong package.json (json-server 0.17.4)
+npm run server
+```
+Hoặc chạy lệnh trực tiếp:
+```bash
+npx json-server --watch db.json --host 0.0.0.0 --port 3000 --delay 800
+```
+- Máy ảo Android kết nối qua: `http://10.0.2.2:3000` (đã được cấu hình tự động trong `src/config.js`).
+- Máy thật kết nối qua: `http://<IP-LAN-may-tinh>:3000`.
+
+### Bước 2: Khởi động Ứng dụng React Native
+Mở một cửa sổ Terminal khác tại thư mục dự án:
+```bash
+# Cài đặt thư viện (nếu clone mới)
+npm install --legacy-peer-deps
+
+# Khởi động Metro Bundler
 npm start
 
-# OR using Yarn
-yarn start
-```
-
-## Step 2: Build and run your app
-
-With Metro running, open a new terminal window/pane from the root of your React Native project, and use one of the following commands to build and run your Android or iOS app:
-
-### Android
-
-```sh
-# Using npm
+# Chạy trên máy ảo Android
 npm run android
-
-# OR using Yarn
-yarn android
 ```
 
-### iOS
+---
 
-For iOS, remember to install CocoaPods dependencies (this only needs to be run on first clone or after updating native deps).
+## 4. Hướng Dẫn Thực Hiện 7 Kịch Bản Kiểm Thử
 
-The first time you create a new project, run the Ruby bundler to install CocoaPods itself:
-
-```sh
-bundle install
-```
-
-Then, and every time you update your native dependencies, run:
-
-```sh
-bundle exec pod install
-```
-
-For more information, please visit [CocoaPods Getting Started guide](https://guides.cocoapods.org/using/getting-started.html).
-
-```sh
-# Using npm
-npm run ios
-
-# OR using Yarn
-yarn ios
-```
-
-If everything is set up correctly, you should see your new app running in the Android Emulator, iOS Simulator, or your connected device.
-
-This is one way to run your app — you can also build it directly from Android Studio or Xcode.
-
-## Step 3: Modify your app
-
-Now that you have successfully run the app, let's make changes!
-
-Open `App.tsx` in your text editor of choice and make some changes. When you save, your app will automatically update and reflect these changes — this is powered by [Fast Refresh](https://reactnative.dev/docs/fast-refresh).
-
-When you want to forcefully reload, for example to reset the state of your app, you can perform a full reload:
-
-- **Android**: Press the <kbd>R</kbd> key twice or select **"Reload"** from the **Dev Menu**, accessed via <kbd>Ctrl</kbd> + <kbd>M</kbd> (Windows/Linux) or <kbd>Cmd ⌘</kbd> + <kbd>M</kbd> (macOS).
-- **iOS**: Press <kbd>R</kbd> in iOS Simulator.
-
-## Congratulations! :tada:
-
-You've successfully run and modified your React Native App. :partying_face:
-
-### Now what?
-
-- If you want to add this new React Native code to an existing application, check out the [Integration guide](https://reactnative.dev/docs/integration-with-existing-apps).
-- If you're curious to learn more about React Native, check out the [docs](https://reactnative.dev/docs/getting-started).
-
-# Troubleshooting
-
-If you're having issues getting the above steps to work, see the [Troubleshooting](https://reactnative.dev/docs/troubleshooting) page.
-
-# Learn More
-
-To learn more about React Native, take a look at the following resources:
-
-- [React Native Website](https://reactnative.dev) - learn more about React Native.
-- [Getting Started](https://reactnative.dev/docs/environment-setup) - an **overview** of React Native and how setup your environment.
-- [Learn the Basics](https://reactnative.dev/docs/getting-started) - a **guided tour** of the React Native **basics**.
-- [Blog](https://reactnative.dev/blog) - read the latest official React Native **Blog** posts.
-- [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.
+| # | Kịch bản | Cách thực hiện & Kết quả mong đợi |
+|---|---|---|
+| **1** | **Tắt json-server rồi mở ứng dụng lần đầu** | Tắt `npm run server` (hoặc Ctrl+C). Mở ứng dụng. Màn hình hiển thị `ErrorView` với thông báo lỗi rõ ràng và nút "Thử lại", ứng dụng không bị crash. Khi bật lại server và nhấn "Thử lại", dữ liệu tải về bình thường. |
+| **2** | **Mở app có mạng, sau đó bật Chế độ máy bay và mở lại** | Dữ liệu được đọc tức thì từ bộ nhớ đệm `AsyncStorage`. Banner đỏ `⚠️ Bạn đang offline` xuất hiện trên đầu màn hình, đi kèm dòng thời gian `Cập nhật lần cuối: HH:mm, dd/MM/yyyy`. |
+| **3** | **Khi offline: đổi trạng thái 2 bài tập & thêm 1 bài mới** | Tắt mạng. Nhấn toggle chuyển trạng thái bài tập: giao diện đổi ngay lập tức (Optimistic update) và xuất hiện nhãn `🔄 Chưa đồng bộ`. Vào "Thêm bài", nhập thông tin và nhấn Lưu: bài tập mới được đưa vào danh sách với nhãn `🔄 Chưa đồng bộ`. Banner thông báo có thay đổi chưa đồng bộ hiển thị ở Trang chủ. |
+| **4** | **Tắt chế độ máy bay (có mạng lại)** | Bật lại mạng. Hook `useOutboxSync` tự động phát hiện mạng và gửi các thao tác theo thứ tự lên server. Hiển thị thông báo `Đã đồng bộ X thay đổi.`, các nhãn `🔄 Chưa đồng bộ` biến mất, file `db.json` được cập nhật chính xác. |
+| **5** | **Xử lý xung đột (Conflict resolution)** | Khi offline: sửa họ tên sinh viên. Trước khi bật mạng: mở file `db.json` sửa họ tên và tăng `updatedAt` mới hơn thời điểm sửa offline. Bật mạng lại: app phát hiện xung đột, hiển thị Alert thông báo ưu tiên giữ dữ liệu server, không ghi đè dữ liệu cũ. |
+| **6** | **Tìm kiếm không tồn tại & lọc rỗng** | Vào tab "Môn học", gõ từ khóa ngẫu nhiên (ví dụ: `xyz123`): hiển thị `EmptyState` thân thiện kèm nút xóa bộ lọc. Vào "Thời khóa biểu", chọn ngày Chủ nhật (hoặc ngày không có lịch): hiển thị thông báo rỗng. |
+| **7** | **Kéo để làm mới (Pull-to-refresh)** | Tại bất kỳ màn hình danh sách nào, vuốt từ trên xuống: vòng xoay làm mới xuất hiện, dữ liệu được cập nhật lại từ API và làm mới timestamp `lastUpdated`. |
